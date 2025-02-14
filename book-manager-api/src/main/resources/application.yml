@@ -1,0 +1,23 @@
+spring.application.name: book-manager-api
+
+server:
+  port: 9099
+  servlet:
+    context-path: /book-manager-api
+
+spring.profiles.group:
+  local:
+    - datasource-local
+
+spring-doc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+---
+spring.config.activate.on-profile: local
+
+logging.level:
+  web: DEBUG
+  org.springframework: DEBUG
