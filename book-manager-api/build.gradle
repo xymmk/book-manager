@@ -13,3 +13,7 @@ bootJar {
 	archiveFileName = "book-manager-api"
 	launchScript()
 }
+
+test {
+	useJUnitPlatform()
+}

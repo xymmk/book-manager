@@ -6,12 +6,14 @@ import com.quo.book.manager.jooq.tables.references.BOOKS
 import com.quo.book.manager.model.PublicationStatus
 import com.quo.book.manager.model.book.Book
 import com.quo.book.manager.repository.BookRepository
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.jooq.DSLContext
 import org.springframework.stereotype.Repository
 import java.math.BigDecimal
 
 @Repository
 class BookRepositoryImpl(val dsl: DSLContext) : BookRepository {
+    private val _logger = KotlinLogging.logger {}
 
     /**
      * 著者に紐づく書籍IDを取得する
@@ -36,6 +38,7 @@ class BookRepositoryImpl(val dsl: DSLContext) : BookRepository {
                 .set(AuthorBook.AUTHOR_BOOK.BOOK_ID, bookId)
                 .set(AuthorBook.AUTHOR_BOOK.AUTHOR_ID, it.toInt())
                 .execute()
+            _logger.info { "書籍ID: $bookId に著者ID: $it を紐づけました" }
         }
     }
 
@@ -49,6 +52,7 @@ class BookRepositoryImpl(val dsl: DSLContext) : BookRepository {
         dsl.deleteFrom(AuthorBook.AUTHOR_BOOK)
             .where(AuthorBook.AUTHOR_BOOK.BOOK_ID.eq(bookId))
             .execute()
+        _logger.info { "書籍ID: $bookId に紐づく著者情報を削除しました" }
 
         // 新しい著者情報を登録
         insertAssociation(bookId, authorIdList)
@@ -86,6 +90,7 @@ class BookRepositoryImpl(val dsl: DSLContext) : BookRepository {
         return record?.let {
             // 書籍と著者関連情報を登録
             val bookId = it.getValue(BOOKS.BOOK_ID)!!
+            _logger.info { "書籍ID: $bookId を登録しました" }
             insertAssociation(bookId, book.getAuthors())
 
             // Bookオブジェクトを生成して返す
@@ -119,6 +124,7 @@ class BookRepositoryImpl(val dsl: DSLContext) : BookRepository {
             .execute()
 
         updateAssociation(newBook.bookId!!.toInt(), newBook.getAuthors())
+        _logger.info { "書籍ID: ${newBook.bookId} を更新しました" }
     }
 
     override fun findBookBy(bookId: String): Book? {

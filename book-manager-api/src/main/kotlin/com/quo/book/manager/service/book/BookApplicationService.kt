@@ -8,6 +8,7 @@ import com.quo.book.manager.dto.book.BookInfoResponse
 import com.quo.book.manager.dto.book.BookResponseData
 import com.quo.book.manager.model.book.Book
 import com.quo.book.manager.service.author.AuthorService
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
@@ -17,6 +18,7 @@ import java.util.*
  */
 @Service
 class BookApplicationService(val bookService: BookService, val authorService: AuthorService) {
+    private val _logger = KotlinLogging.logger {}
 
     private fun getAuthorInfoBy(authorId: String): AuthorInfoResponse {
         val author = authorService.findAuthorBy(authorId)
@@ -56,6 +58,7 @@ class BookApplicationService(val bookService: BookService, val authorService: Au
                 String.format("%s 書籍番号:%s", REGISTER_SUCCESS_MESSAGE, registeredBook.bookId!!)
             )
         } catch (e: Exception) {
+            _logger.error(e) { "書籍登録は失敗でした。エラー: $e" }
             return BookManagerApiResponse(
                 ResponseStatus.FAILED, String.format(
                     "%s %s",
@@ -90,6 +93,7 @@ class BookApplicationService(val bookService: BookService, val authorService: Au
                 UPDATE_SUCCESS_MESSAGE
             )
         }catch (e: Exception){
+            _logger.error(e) { "書籍更新は失敗でした。エラー: $e" }
             return BookManagerApiResponse(
                 ResponseStatus.FAILED, String.format(
                     "%s %s",
@@ -114,6 +118,7 @@ class BookApplicationService(val bookService: BookService, val authorService: Au
             }
             return BookInfoResponse(ResponseStatus.OK, bookResponseList)
         }catch (e: Exception){
+            _logger.error(e) { "著者ID: $authorId に対する書籍情報取得は失敗でした。エラー: $e" }
             return BookInfoResponse(
                 ResponseStatus.FAILED, Collections.emptyList()
             )

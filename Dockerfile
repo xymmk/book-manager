@@ -1,8 +1,5 @@
 FROM amazoncorretto:21 AS builder
 ENV TZ="Asia/Tokyo"
-ENV POSTGRE_DB_URL=""
-ENV POSTGRE_DB_USER="postgres"
-ENV POSTGRE_DB_PASSWORD="postgres"
 
 USER root
 RUN mkdir -p /usr/local/app/

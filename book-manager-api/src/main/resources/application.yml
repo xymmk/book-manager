@@ -9,6 +9,8 @@ server:
 spring.profiles.group:
   local:
     - datasource-local
+  test:
+    - datasource-test
 
 spring-doc:
   api-docs:
@@ -22,5 +24,16 @@ spring.config.activate.on-profile: local
 logging.level:
   web: DEBUG
   org.springframework: DEBUG
+  com.quo.book.manager: DEBUG
+  org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter: DEBUG
+  org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver: DEBUG
+
+---
+
+spring.config.activate.on-profile: test
+logging.level:
+  web: DEBUG
+  org.springframework: DEBUG
+  com.quo.book.manager: DEBUG
   org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter: DEBUG
   org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver: DEBUG

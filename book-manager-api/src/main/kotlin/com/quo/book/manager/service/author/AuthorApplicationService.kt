@@ -4,6 +4,7 @@ import com.quo.book.manager.dto.BookManagerApiResponse
 import com.quo.book.manager.dto.ResponseStatus
 import com.quo.book.manager.dto.author.AuthorControllerRequest
 import com.quo.book.manager.model.author.Author
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
@@ -12,12 +13,14 @@ import java.time.format.DateTimeFormatter
 
 @Service
 class AuthorApplicationService(val authorService: AuthorService) {
+    private val _logger = KotlinLogging.logger {}
+
     /**
      * 生年月日の文字列をLocalDateに変換する
      * @param birthDate 生年月日の文字列
      * @return LocalDate 生年月日
      */
-    private fun convertBirthDate(birthDate: String): LocalDate{
+    private fun convertBirthDate(birthDate: String): LocalDate {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         return LocalDate.parse(birthDate, formatter)
     }
@@ -46,6 +49,7 @@ class AuthorApplicationService(val authorService: AuthorService) {
             )
 
         }catch (e: Exception){
+            _logger.error(e) { "著者登録は失敗でした。エラー: $e" }
             return BookManagerApiResponse(
                 ResponseStatus.FAILED, String.format(
                     "%s %s",
@@ -85,6 +89,7 @@ class AuthorApplicationService(val authorService: AuthorService) {
             )
 
         }catch (e: Exception){
+            _logger.error(e) { "著者更新は失敗でした。エラー: $e" }
             return BookManagerApiResponse(
                 ResponseStatus.FAILED, String.format(
                     "%s %s",

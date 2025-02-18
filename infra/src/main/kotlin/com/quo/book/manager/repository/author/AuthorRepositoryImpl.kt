@@ -5,11 +5,13 @@ import com.quo.book.manager.jooq.tables.references.AUTHORS
 import com.quo.book.manager.jooq.tables.references.AUTHOR_BOOK
 import com.quo.book.manager.model.author.Author
 import com.quo.book.manager.repository.AuthorRepository
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.jooq.DSLContext
 import org.springframework.stereotype.Repository
 
 @Repository
 class AuthorRepositoryImpl(val dsl: DSLContext) : AuthorRepository {
+    private val _logger = KotlinLogging.logger {}
 
 
     /**
@@ -22,6 +24,7 @@ class AuthorRepositoryImpl(val dsl: DSLContext) : AuthorRepository {
         dsl.deleteFrom(AuthorBook.AUTHOR_BOOK)
             .where(AuthorBook.AUTHOR_BOOK.AUTHOR_ID.eq(authorId))
             .execute()
+        _logger.info { "著者ID: $authorId に紐づく書籍情報を削除しました" }
 
         // 新しい著者情報を登録
         insertAssociation(authorId, bookIdList)
@@ -37,6 +40,7 @@ class AuthorRepositoryImpl(val dsl: DSLContext) : AuthorRepository {
             .set(AuthorBook.AUTHOR_BOOK.AUTHOR_ID, authorId)
             .set(AuthorBook.AUTHOR_BOOK.BOOK_ID, it.toInt())
             .execute()
+        _logger.info { "著者ID: $authorId に書籍ID: $it を紐づけました" }
     }
 
     /**
@@ -75,8 +79,9 @@ class AuthorRepositoryImpl(val dsl: DSLContext) : AuthorRepository {
             .returning(AUTHORS.AUTHOR_ID, AUTHORS.AUTHOR_NAME, AUTHORS.BIRTH_DATE)
             .fetchOne()
         return record?.let {
-            val authorId = it.getValue(AUTHORS.AUTHOR_ID)!!
             // 著者と書籍の関連情報を登録
+            val authorId = it.getValue(AUTHORS.AUTHOR_ID)!!
+            _logger.info { "著者ID: $authorId の情報を登録しました" }
             insertAssociation(authorId, author.getBooks())
             Author(
                 authorId = authorId.toString(),
@@ -93,5 +98,6 @@ class AuthorRepositoryImpl(val dsl: DSLContext) : AuthorRepository {
             .where(AUTHORS.AUTHOR_ID.eq(author.authorId!!.toInt()))
             .execute()
         updateAssociation(author.authorId!!.toInt(), author.getBooks())
+        _logger.info { "著者ID: ${author.authorId} の情報を更新しました" }
     }
 }

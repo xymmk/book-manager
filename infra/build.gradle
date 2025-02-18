@@ -21,14 +21,28 @@ dependencies {
     jooqCodegen("org.postgresql:postgresql:42.7.4")
 }
 
+def getDatabaseUrl() {
+    var active = System.getenv("SPRING_PROFILES_ACTIVE")
+    if (active == "test") {
+        return "jdbc:postgresql://localhost:5432/book-manager-test"
+    }
+    if (active == "dev") {
+        return "jdbc:postgresql://localhost:5432/book-manager"
+    }
+    if (active == "local") {
+        return "jdbc:postgresql://localhost:5432/book-manager"
+    }
+    return "jdbc:postgresql://localhost:5432/book-manager"
+}
+
 jooq {
     configuration {
 
         jdbc {
             driver = "org.postgresql.Driver"
-            url = System.getenv("POSTGRE_DB_URL") ?: "jdbc:postgresql://localhost:5432/book-manager"
-            user = System.getenv("POSTGRE_DB_USER") ?: "postgres"
-            password = System.getenv("POSTGRE_DB_PASSWORD") ?: "postgres"
+            url = getDatabaseUrl()
+            user = "postgres"
+            password = "postgres"
         }
         generator {
             name = 'org.jooq.codegen.KotlinGenerator'
@@ -66,9 +80,9 @@ tasks.named("compileKotlin") {
 flyway {
     driver = "org.postgresql.Driver"
     //docker環境でビルドする場合、環境変数から取得し、コンテナのDBに接続する
-    url = System.getenv("POSTGRE_DB_URL") ?: "jdbc:postgresql://localhost:5432/book-manager"
-    user = System.getenv("POSTGRE_DB_USER") ?: "postgres"
-    password = System.getenv("POSTGRE_DB_PASSWORD") ?: "postgres"
+    url = getDatabaseUrl()
+    user = "postgres"
+    password = "postgres"
     schemas = ["public"]
     cleanDisabled = false
 }

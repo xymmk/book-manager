@@ -27,4 +27,14 @@ class RequestException {
 
         return ResponseEntity(response, HttpStatus.BAD_REQUEST)
     }
+
+    @ExceptionHandler(Exception::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleInvalidJsonFormat(ex: Exception): ResponseEntity<BookManagerApiResponse> {
+        val response = BookManagerApiResponse(
+            result = com.quo.book.manager.dto.ResponseStatus.FAILED,
+            message = "リクエストの形式が不正です"
+        )
+        return ResponseEntity(response, HttpStatus.BAD_REQUEST)
+    }
 }
