@@ -4,10 +4,10 @@
 package com.quo.book.manager.jooq.keys
 
 
-import com.quo.book.manager.jooq.tables.AuthorBooks
+import com.quo.book.manager.jooq.tables.AuthorBook
 import com.quo.book.manager.jooq.tables.Authors
 import com.quo.book.manager.jooq.tables.Books
-import com.quo.book.manager.jooq.tables.records.AuthorBooksRecord
+import com.quo.book.manager.jooq.tables.records.AuthorBookRecord
 import com.quo.book.manager.jooq.tables.records.AuthorsRecord
 import com.quo.book.manager.jooq.tables.records.BooksRecord
 
@@ -22,7 +22,7 @@ import org.jooq.impl.Internal
 // UNIQUE and PRIMARY KEY definitions
 // -------------------------------------------------------------------------
 
-val AUTHOR_BOOKS_PKEY: UniqueKey<AuthorBooksRecord> = Internal.createUniqueKey(AuthorBooks.AUTHOR_BOOKS, DSL.name("author_books_pkey"), arrayOf(AuthorBooks.AUTHOR_BOOKS.BOOK_ID, AuthorBooks.AUTHOR_BOOKS.AUTHOR_ID), true)
+val AUTHOR_BOOK_PKEY: UniqueKey<AuthorBookRecord> = Internal.createUniqueKey(AuthorBook.AUTHOR_BOOK, DSL.name("author_book_pkey"), arrayOf(AuthorBook.AUTHOR_BOOK.BOOK_ID, AuthorBook.AUTHOR_BOOK.AUTHOR_ID), true)
 val AUTHORS_PKEY: UniqueKey<AuthorsRecord> = Internal.createUniqueKey(Authors.AUTHORS, DSL.name("authors_pkey"), arrayOf(Authors.AUTHORS.AUTHOR_ID), true)
 val BOOKS_PKEY: UniqueKey<BooksRecord> = Internal.createUniqueKey(Books.BOOKS, DSL.name("books_pkey"), arrayOf(Books.BOOKS.BOOK_ID), true)
 
@@ -30,5 +30,5 @@ val BOOKS_PKEY: UniqueKey<BooksRecord> = Internal.createUniqueKey(Books.BOOKS, D
 // FOREIGN KEY definitions
 // -------------------------------------------------------------------------
 
-val AUTHOR_BOOKS__AUTHOR_BOOKS_AUTHOR_ID_FKEY: ForeignKey<AuthorBooksRecord, AuthorsRecord> = Internal.createForeignKey(AuthorBooks.AUTHOR_BOOKS, DSL.name("author_books_author_id_fkey"), arrayOf(AuthorBooks.AUTHOR_BOOKS.AUTHOR_ID), com.quo.book.manager.jooq.keys.AUTHORS_PKEY, arrayOf(Authors.AUTHORS.AUTHOR_ID), true)
-val AUTHOR_BOOKS__AUTHOR_BOOKS_BOOK_ID_FKEY: ForeignKey<AuthorBooksRecord, BooksRecord> = Internal.createForeignKey(AuthorBooks.AUTHOR_BOOKS, DSL.name("author_books_book_id_fkey"), arrayOf(AuthorBooks.AUTHOR_BOOKS.BOOK_ID), com.quo.book.manager.jooq.keys.BOOKS_PKEY, arrayOf(Books.BOOKS.BOOK_ID), true)
+val AUTHOR_BOOK__AUTHOR_BOOK_AUTHOR_ID_FKEY: ForeignKey<AuthorBookRecord, AuthorsRecord> = Internal.createForeignKey(AuthorBook.AUTHOR_BOOK, DSL.name("author_book_author_id_fkey"), arrayOf(AuthorBook.AUTHOR_BOOK.AUTHOR_ID), com.quo.book.manager.jooq.keys.AUTHORS_PKEY, arrayOf(Authors.AUTHORS.AUTHOR_ID), true)
+val AUTHOR_BOOK__AUTHOR_BOOK_BOOK_ID_FKEY: ForeignKey<AuthorBookRecord, BooksRecord> = Internal.createForeignKey(AuthorBook.AUTHOR_BOOK, DSL.name("author_book_book_id_fkey"), arrayOf(AuthorBook.AUTHOR_BOOK.BOOK_ID), com.quo.book.manager.jooq.keys.BOOKS_PKEY, arrayOf(Books.BOOKS.BOOK_ID), true)

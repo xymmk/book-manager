@@ -4,16 +4,16 @@
 package com.quo.book.manager.jooq.tables.references
 
 
-import com.quo.book.manager.jooq.tables.AuthorBooks
+import com.quo.book.manager.jooq.tables.AuthorBook
 import com.quo.book.manager.jooq.tables.Authors
 import com.quo.book.manager.jooq.tables.Books
 
 
 
 /**
- * The table <code>public.author_books</code>.
+ * The table <code>public.author_book</code>.
  */
-val AUTHOR_BOOKS: AuthorBooks = AuthorBooks.AUTHOR_BOOKS
+val AUTHOR_BOOK: AuthorBook = AuthorBook.AUTHOR_BOOK
 
 /**
  * The table <code>public.authors</code>.

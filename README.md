@@ -105,7 +105,7 @@ docker compose up
 ```
 {
   "result": "{ok ・ failed}",
-  "book_id": "成功登録となる場合、book_idを返す"
+  "message": "登録成功 書籍番号:{書籍番号}"
 }
 ```
 
@@ -192,9 +192,9 @@ docker compose up
     - type: string
     - constraints: 文字数は 1 以上、500 以下
   - birth_date:
-    - description: 生年月日
+    - description: 生年月日(YYYY-MM-DD)
     - required: true
-    - type: Date
+    - type: String
     - constraints: 生年月日は現在の日付より過去であることと設定する必要がある
   - books:
     - description: 書籍リスト
@@ -224,6 +224,7 @@ docker compose up
 1、名前は空文字は禁止、最大の文字制限はデータベースの制限によって、500文字と設定
 2、生年月日は現在の日付より過去であることと設定する必要がある
 3、書籍リストの中に、システム上で存在していない書籍がある場合は更新せず、エラーを表示する
+4. 書籍リストは空となる場合、著者に紐づく本がないように更新
 ```
 
 #### IF
@@ -241,9 +242,9 @@ docker compose up
     - type: string
     - constraints: 文字数は 1 以上、500 以下
   - birth_date:
-    - description: 生年月日
+    - description: 生年月日(YYYY-MM-DD)
     - required: true
-    - type: Date
+    - type: string
     - constraints: 生年月日は現在の日付より過去であることと設定する必要がある
   - books:
     - description: 書籍リスト
@@ -274,7 +275,7 @@ docker compose up
 
 #### IF
 
-- path: {context-path}/book/{author_id}
+- path: {context-path}/book/{author_id}/list
 - method: get
 - path_param:
   - author_id
@@ -284,13 +285,20 @@ docker compose up
 
 ```
 {
+  "result": "{ok ・ failed}"
   "data": [
     {
         "book_id": "書籍のID",
         "price": "書籍の価格",
         "title": "書籍のタイトル",
-        "publication_status": "書籍の出版状況"
-
+        "publication_status": "書籍の出版状況",
+        "authors":[
+          {
+            "id": "著者のID",
+            "name": "著者名",
+            "birth": "著者生年月日"
+          }
+        ]
     }
   ]
 }

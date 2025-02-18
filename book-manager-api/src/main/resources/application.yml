@@ -1,5 +1,6 @@
 spring.application.name: book-manager-api
 
+
 server:
   port: 9099
   servlet:
@@ -21,3 +22,5 @@ spring.config.activate.on-profile: local
 logging.level:
   web: DEBUG
   org.springframework: DEBUG
+  org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter: DEBUG
+  org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver: DEBUG

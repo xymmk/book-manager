@@ -6,8 +6,8 @@ package com.quo.book.manager.jooq.tables
 
 import com.quo.book.manager.jooq.Public
 import com.quo.book.manager.jooq.keys.AUTHORS_PKEY
-import com.quo.book.manager.jooq.keys.AUTHOR_BOOKS__AUTHOR_BOOKS_AUTHOR_ID_FKEY
-import com.quo.book.manager.jooq.tables.AuthorBooks.AuthorBooksPath
+import com.quo.book.manager.jooq.keys.AUTHOR_BOOK__AUTHOR_BOOK_AUTHOR_ID_FKEY
+import com.quo.book.manager.jooq.tables.AuthorBook.AuthorBookPath
 import com.quo.book.manager.jooq.tables.Books.BooksPath
 import com.quo.book.manager.jooq.tables.records.AuthorsRecord
 
@@ -126,28 +126,28 @@ open class Authors(
     override fun getIdentity(): Identity<AuthorsRecord, Int?> = super.getIdentity() as Identity<AuthorsRecord, Int?>
     override fun getPrimaryKey(): UniqueKey<AuthorsRecord> = AUTHORS_PKEY
 
-    private lateinit var _authorBooks: AuthorBooksPath
+    private lateinit var _authorBook: AuthorBookPath
 
     /**
-     * Get the implicit to-many join path to the
-     * <code>public.author_books</code> table
+     * Get the implicit to-many join path to the <code>public.author_book</code>
+     * table
      */
-    fun authorBooks(): AuthorBooksPath {
-        if (!this::_authorBooks.isInitialized)
-            _authorBooks = AuthorBooksPath(this, null, AUTHOR_BOOKS__AUTHOR_BOOKS_AUTHOR_ID_FKEY.inverseKey)
+    fun authorBook(): AuthorBookPath {
+        if (!this::_authorBook.isInitialized)
+            _authorBook = AuthorBookPath(this, null, AUTHOR_BOOK__AUTHOR_BOOK_AUTHOR_ID_FKEY.inverseKey)
 
-        return _authorBooks;
+        return _authorBook;
     }
 
-    val authorBooks: AuthorBooksPath
-        get(): AuthorBooksPath = authorBooks()
+    val authorBook: AuthorBookPath
+        get(): AuthorBookPath = authorBook()
 
     /**
      * Get the implicit many-to-many join path to the <code>public.books</code>
      * table
      */
     val books: BooksPath
-        get(): BooksPath = authorBooks().books()
+        get(): BooksPath = authorBook().books()
     override fun `as`(alias: String): Authors = Authors(DSL.name(alias), this)
     override fun `as`(alias: Name): Authors = Authors(alias, this)
     override fun `as`(alias: Table<*>): Authors = Authors(alias.qualifiedName, this)

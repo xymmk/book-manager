@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/book-manager
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+    sql-script-encoding: utf-8
+    hikari:
+      connection-timeout: 60000
+      max-life-time: 60000
+      minimum-idle: 5
+      idle-timeout: 50000
+      maximum-pool-size: 10
+
+  flyway:
+    url: jdbc:postgresql://172.20.0.2:5432/postgres
+    user: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+

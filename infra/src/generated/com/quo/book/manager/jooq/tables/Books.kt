@@ -5,9 +5,9 @@ package com.quo.book.manager.jooq.tables
 
 
 import com.quo.book.manager.jooq.Public
-import com.quo.book.manager.jooq.keys.AUTHOR_BOOKS__AUTHOR_BOOKS_BOOK_ID_FKEY
+import com.quo.book.manager.jooq.keys.AUTHOR_BOOK__AUTHOR_BOOK_BOOK_ID_FKEY
 import com.quo.book.manager.jooq.keys.BOOKS_PKEY
-import com.quo.book.manager.jooq.tables.AuthorBooks.AuthorBooksPath
+import com.quo.book.manager.jooq.tables.AuthorBook.AuthorBookPath
 import com.quo.book.manager.jooq.tables.Authors.AuthorsPath
 import com.quo.book.manager.jooq.tables.records.BooksRecord
 
@@ -84,7 +84,7 @@ open class Books(
     /**
      * The column <code>public.books.price</code>.
      */
-    val PRICE: TableField<BooksRecord, BigDecimal?> = createField(DSL.name("price"), SQLDataType.NUMERIC(10, 2).nullable(false), this, "")
+    val PRICE: TableField<BooksRecord, BigDecimal?> = createField(DSL.name("price"), SQLDataType.NUMERIC.nullable(false), this, "")
 
     /**
      * The column <code>public.books.title</code>.
@@ -131,28 +131,28 @@ open class Books(
     override fun getIdentity(): Identity<BooksRecord, Int?> = super.getIdentity() as Identity<BooksRecord, Int?>
     override fun getPrimaryKey(): UniqueKey<BooksRecord> = BOOKS_PKEY
 
-    private lateinit var _authorBooks: AuthorBooksPath
+    private lateinit var _authorBook: AuthorBookPath
 
     /**
-     * Get the implicit to-many join path to the
-     * <code>public.author_books</code> table
+     * Get the implicit to-many join path to the <code>public.author_book</code>
+     * table
      */
-    fun authorBooks(): AuthorBooksPath {
-        if (!this::_authorBooks.isInitialized)
-            _authorBooks = AuthorBooksPath(this, null, AUTHOR_BOOKS__AUTHOR_BOOKS_BOOK_ID_FKEY.inverseKey)
+    fun authorBook(): AuthorBookPath {
+        if (!this::_authorBook.isInitialized)
+            _authorBook = AuthorBookPath(this, null, AUTHOR_BOOK__AUTHOR_BOOK_BOOK_ID_FKEY.inverseKey)
 
-        return _authorBooks;
+        return _authorBook;
     }
 
-    val authorBooks: AuthorBooksPath
-        get(): AuthorBooksPath = authorBooks()
+    val authorBook: AuthorBookPath
+        get(): AuthorBookPath = authorBook()
 
     /**
      * Get the implicit many-to-many join path to the
      * <code>public.authors</code> table
      */
     val authors: AuthorsPath
-        get(): AuthorsPath = authorBooks().authors()
+        get(): AuthorsPath = authorBook().authors()
     override fun `as`(alias: String): Books = Books(DSL.name(alias), this)
     override fun `as`(alias: Name): Books = Books(alias, this)
     override fun `as`(alias: Table<*>): Books = Books(alias.qualifiedName, this)

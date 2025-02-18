@@ -4,7 +4,7 @@
 package com.quo.book.manager.jooq
 
 
-import com.quo.book.manager.jooq.tables.AuthorBooks
+import com.quo.book.manager.jooq.tables.AuthorBook
 import com.quo.book.manager.jooq.tables.Authors
 import com.quo.book.manager.jooq.tables.Books
 
@@ -29,9 +29,9 @@ open class Public : SchemaImpl("public", DefaultCatalog.DEFAULT_CATALOG) {
     }
 
     /**
-     * The table <code>public.author_books</code>.
+     * The table <code>public.author_book</code>.
      */
-    val AUTHOR_BOOKS: AuthorBooks get() = AuthorBooks.AUTHOR_BOOKS
+    val AUTHOR_BOOK: AuthorBook get() = AuthorBook.AUTHOR_BOOK
 
     /**
      * The table <code>public.authors</code>.
@@ -46,7 +46,7 @@ open class Public : SchemaImpl("public", DefaultCatalog.DEFAULT_CATALOG) {
     override fun getCatalog(): Catalog = DefaultCatalog.DEFAULT_CATALOG
 
     override fun getTables(): List<Table<*>> = listOf(
-        AuthorBooks.AUTHOR_BOOKS,
+        AuthorBook.AUTHOR_BOOK,
         Authors.AUTHORS,
         Books.BOOKS
     )

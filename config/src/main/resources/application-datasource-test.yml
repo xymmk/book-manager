@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    url: jdbc:tc:postgresql:15://localhost:5432/book-manager?TC_INITSCRIPT=file:src/test/resources/init_test_postgres.sql
+    username: postgres
+    password: postgres
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+    sql-script-encoding: utf-8
+    hikari:
+      connection-timeout: 60000
+      max-life-time: 60000
+      minimum-idle: 5
+      idle-timeout: 50000
+      maximum-pool-size: 10

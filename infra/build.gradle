@@ -77,3 +77,5 @@ tasks.named("jooqCodegen") {
     dependsOn(tasks.named("flywayMigrate"))
     inputs.files(fileTree("src/main/resources/db/migration"))
 }
+
+flywayMigrate.dependsOn flywayRepair
