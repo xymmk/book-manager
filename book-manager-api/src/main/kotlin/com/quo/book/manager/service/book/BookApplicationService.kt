@@ -78,6 +78,12 @@ class BookApplicationService(val bookService: BookService, val authorService: Au
     @Transactional
     fun updateBook(oldBookId: String, request: BookControllerRequest): BookManagerApiResponse {
         try{
+            val oldBook = bookService.findBookBy(oldBookId)
+
+            // 更新対象書籍が存在しない場合、エラーを返却
+            oldBook ?: return BookManagerApiResponse(
+                ResponseStatus.NOT_FOUND, "書籍が見つかりませんでした"
+            )
             // 更新対象を作成
             val newBook = Book(
                 title = request.title,
@@ -85,7 +91,7 @@ class BookApplicationService(val bookService: BookService, val authorService: Au
                 publicationStatus = request.publicationStatus
             )
             // 書籍更新
-            bookService.updateBook(oldBookId, newBook, request.authors)
+            bookService.updateBook(oldBook, newBook, request.authors)
 
             // 更新成功メッセージを返却
             return BookManagerApiResponse(

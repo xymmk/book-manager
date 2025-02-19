@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://172.20.0.2:5432/book-manager
+    url: jdbc:postgresql://host.docker.internal:5432/book-manager
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
@@ -13,7 +13,7 @@ spring:
       maximum-pool-size: 10
 
   flyway:
-    url: jdbc:postgresql://172.20.0.2:5432/postgres
+    url: jdbc:postgresql://host.docker.internal:5432/postgres
     user: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver

@@ -70,6 +70,11 @@ class AuthorApplicationService(val authorService: AuthorService) {
     @Transactional
     fun updateAuthor(authorId: String, authorControllerRequest: AuthorControllerRequest): BookManagerApiResponse{
         try{
+            authorService.findAuthorBy(authorId)
+                ?: return BookManagerApiResponse(
+                    ResponseStatus.NOT_FOUND, "著者が見つかりませんでした"
+                )
+
             // 生年月日をLocalDateに変換
             val birthDate = convertBirthDate(authorControllerRequest.birthDate)
 

@@ -223,13 +223,13 @@ internal class AuthorManageControllerTest {
         // 書籍登録
         val book1 = Book(
             price = 1000.1323,
-            title = "test book1",
+            title = "test book1000.1323",
             publicationStatus = PublicationStatus.UNPUBLISHED
         )
         // 書籍登録
         val book2 = Book(
-            price = 1000.1323,
-            title = "test book2",
+            price = 2000.1323,
+            title = "test book2000.1323",
             publicationStatus = PublicationStatus.UNPUBLISHED
         )
         bookService.registerBook(book1, listOf("1"))
@@ -292,8 +292,8 @@ internal class AuthorManageControllerTest {
                 )
         ).andReturn()
         result.response.characterEncoding = "UTF-8"
-        Assertions.assertTrue(result.response.status == 500, "HTTPステータスコードが500であること")
-        Assertions.assertTrue(result.response.contentAsString.contains("著者が存在しません"), "エラーメッセージが含まれていること")
+        Assertions.assertTrue(result.response.status == 404, "HTTPステータスコードが404であること")
+        Assertions.assertTrue(result.response.contentAsString.contains("著者が見つかりませんでした"), "エラーメッセージが含まれていること")
     }
 
 

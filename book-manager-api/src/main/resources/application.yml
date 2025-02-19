@@ -7,6 +7,8 @@ server:
     context-path: /book-manager-api
 
 spring.profiles.group:
+  dev:
+    - datasource-dev
   local:
     - datasource-local
   test:

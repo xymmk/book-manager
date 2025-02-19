@@ -2,10 +2,37 @@ services:
   postgres:
     container_name: postgres
     image: postgres:15
-    platform: linux/x86_64
+    platform: linux/arm64
     ports:
       - "5432:5432"
     environment:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "postgres"
       POSTGRES_DB: "book-manager"
+    networks:
+      book-network:
+        ipv4_address: 172.20.0.2
+
+  book-manager-api:
+    container_name: book-manager-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    platform: linux/arm64
+    ports:
+      - "9099:9099"
+    privileged: true
+    depends_on:
+      - postgres
+    environment:
+      SPRING_PROFILES_ACTIVE: "dev"
+    networks:
+      book-network:
+        ipv4_address: 172.20.0.3
+
+networks:
+  book-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

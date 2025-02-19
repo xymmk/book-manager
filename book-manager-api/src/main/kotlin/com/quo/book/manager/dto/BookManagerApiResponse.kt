@@ -16,6 +16,11 @@ import org.springframework.web.ErrorResponse
             responseCode = "500",
             description = "サーバーエラー",
             content = [Content(schema = Schema(implementation = ErrorResponse::class))]
+        ),
+        ApiResponse(
+            responseCode = "404",
+            description = "リソースが見つからない",
+            content = [Content(schema = Schema(implementation = ErrorResponse::class))]
         )
     ]
 )
