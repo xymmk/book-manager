@@ -62,13 +62,12 @@ class BookService(val bookRepository: BookRepository,
      * @param oldBookId 更新前の書籍ID
      * @param newBook 更新後の書籍
      */
-    fun updateBook(oldBookId: String, newBook: Book, authors: List<String>) {
-        val oldBook = findBookBy(oldBookId)
-        requireNotNull(oldBook) { "書籍が存在しません" }
-
+    fun updateBook(oldBook: Book, newBook: Book, authors: List<String>) {
         // 書籍の状態が公開状態から未公開状態に変更する場合、エラーを返却
-        require(!(oldBook.publicationStatus == PublicationStatus.PUBLISHED &&
-                newBook.publicationStatus == PublicationStatus.UNPUBLISHED)) { "公開済の書籍は非公開に変更できません" }
+        require(
+            !(oldBook.publicationStatus == PublicationStatus.PUBLISHED &&
+                    newBook.publicationStatus == PublicationStatus.UNPUBLISHED)
+        ) { "公開済の書籍は非公開に変更できません" }
 
         // 著者リストの著者IDが全て登録済かチェックする
         require(checkALlAuthorsExists(authors)) { "リストの中に登録していない著者があります" }

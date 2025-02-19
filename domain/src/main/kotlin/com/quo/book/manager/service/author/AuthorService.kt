@@ -67,9 +67,6 @@ class AuthorService(
     }
 
     fun updateAuthor(oldAuthorId: String, newAuthor: Author, books: List<String>) {
-        val oldAuthor = findAuthorBy(oldAuthorId)
-        requireNotNull(oldAuthor) { "著者が存在しません" }
-
         val updatedAuthor = Author(
             authorId = oldAuthorId,
             authorName = newAuthor.authorName,

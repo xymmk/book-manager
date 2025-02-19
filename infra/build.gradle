@@ -7,6 +7,8 @@ buildscript {
 plugins {
     id 'org.jooq.jooq-codegen-gradle' version "3.19.11"
     id 'org.flywaydb.flyway' version "10.10.0"
+//    id("com.avast.gradle.docker-compose") version "0.17.12"
+//    id("com.palantir.docker") version "0.36.0"
 }
 
 dependencies {
@@ -22,12 +24,13 @@ dependencies {
 }
 
 def getDatabaseUrl() {
-    var active = System.getenv("SPRING_PROFILES_ACTIVE")
+    def active = System.getenv("spring.profiles.active")
+    println "Running in $active mode, executing script..."
     if (active == "test") {
-        return "jdbc:postgresql://localhost:5432/book-manager-test"
+        return "jdbc:postgresql://localhost:5432/book-manager"
     }
     if (active == "dev") {
-        return "jdbc:postgresql://localhost:5432/book-manager"
+        return "jdbc:postgresql://host.docker.internal:5432/book-manager"
     }
     if (active == "local") {
         return "jdbc:postgresql://localhost:5432/book-manager"
@@ -93,3 +96,19 @@ tasks.named("jooqCodegen") {
 }
 
 flywayMigrate.dependsOn flywayRepair
+
+tasks.register("startPostgresql") {
+    doLast {
+        def active = System.getenv("spring.profiles.active")
+        println "Running in $active mode, executing script..."
+        if (active == "test") {
+            exec {
+                commandLine 'sh', 'startup_postgresql.sh'
+            }
+        }
+    }
+}
+
+
+flywayMigrate.dependsOn tasks.named("flywayRepair")
+flywayRepair.dependsOn tasks.named("startPostgresql")
