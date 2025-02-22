@@ -12,7 +12,11 @@ import java.time.format.DateTimeFormatter
 
 
 @Service
-class AuthorApplicationService(val authorService: AuthorService) {
+class AuthorApplicationService(
+    val authorCommandService: AuthorCommandService,
+    val authorQueryService: AuthorQueryService,
+    val authorValidationService: AuthorValidationService
+) {
     private val _logger = KotlinLogging.logger {}
 
     /**
@@ -42,7 +46,7 @@ class AuthorApplicationService(val authorService: AuthorService) {
                 birthDate = birthDate
             )
             // 著者登録し、登録済の著者情報を取得
-            val registered = authorService.registerAuthor(author, authorControllerRequest.books)
+            val registered = authorCommandService.registerAuthor(author, authorControllerRequest.books)
 
             return BookManagerApiResponse(
                 ResponseStatus.OK, String.format("%s 著者番号:%s", REGISTER_SUCCESS_MESSAGE, registered.authorId!!)
@@ -68,12 +72,13 @@ class AuthorApplicationService(val authorService: AuthorService) {
      * @throws Exception 更新失敗時
      */
     @Transactional
-    fun updateAuthor(authorId: String, authorControllerRequest: AuthorControllerRequest): BookManagerApiResponse{
-        try{
-            authorService.findAuthorBy(authorId)
-                ?: return BookManagerApiResponse(
+    fun updateAuthor(authorId: String, authorControllerRequest: AuthorControllerRequest): BookManagerApiResponse {
+        try {
+            if (authorValidationService.checkAuthorExists(authorId).not()) {
+                return BookManagerApiResponse(
                     ResponseStatus.NOT_FOUND, "著者が見つかりませんでした"
                 )
+            }
 
             // 生年月日をLocalDateに変換
             val birthDate = convertBirthDate(authorControllerRequest.birthDate)
@@ -85,7 +90,7 @@ class AuthorApplicationService(val authorService: AuthorService) {
                 birthDate = birthDate
             )
             // 著者更新
-            authorService.updateAuthor(authorId, newAuthor, authorControllerRequest.books)
+            authorCommandService.updateAuthor(authorId, newAuthor, authorControllerRequest.books)
 
             // 更新成功メッセージを返却
             return BookManagerApiResponse(

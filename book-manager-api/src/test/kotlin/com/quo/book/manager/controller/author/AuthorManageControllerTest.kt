@@ -1,7 +1,7 @@
 package com.quo.book.manager.controller.author
 
-import com.quo.book.manager.service.author.AuthorService
-import com.quo.book.manager.service.book.BookService
+import com.quo.book.manager.service.author.AuthorQueryService
+import com.quo.book.manager.service.book.BookQueryService
 import org.junit.jupiter.api.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -23,10 +23,10 @@ internal class AuthorManageControllerTest {
     private lateinit var mockMvc: MockMvc
 
     @Autowired
-    private lateinit var authorService: AuthorService
+    private lateinit var authorQueryService: AuthorQueryService
 
     @Autowired
-    private lateinit var bookService: BookService
+    private lateinit var bookQueryService: BookQueryService
 
     private val registeredAuthorId = "9000"
 
@@ -110,7 +110,7 @@ internal class AuthorManageControllerTest {
         val jsonResponse: JsonNode = objectMapper.readTree(result.response.contentAsString)
         val message = jsonResponse.get("message").asText()
         val registeredAuthorId = message.split("著者番号:")[1].trim()
-        val author = authorService.findAuthorBy(registeredAuthorId)
+        val author = authorQueryService.findAuthorBy(registeredAuthorId)
         Assertions.assertEquals(
             longName,
             author!!.authorName,
@@ -317,7 +317,7 @@ internal class AuthorManageControllerTest {
         val jsonResponse: JsonNode = objectMapper.readTree(result.response.contentAsString)
         val message = jsonResponse.get("message").asText()
         val registeredAuthorId = message.split("著者番号:")[1].trim()
-        val author = authorService.findAuthorBy(registeredAuthorId)
+        val author = authorQueryService.findAuthorBy(registeredAuthorId)
         Assertions.assertEquals(
             name,
             author!!.authorName,
@@ -364,7 +364,7 @@ internal class AuthorManageControllerTest {
         val jsonResponse: JsonNode = objectMapper.readTree(result.response.contentAsString)
         val message = jsonResponse.get("message").asText()
         val registeredAuthorId = message.split("著者番号:")[1].trim()
-        val author = authorService.findAuthorBy(registeredAuthorId)
+        val author = authorQueryService.findAuthorBy(registeredAuthorId)
         LocalDate.parse(birthDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
 
         // 著者名が登録されているか確認
@@ -379,7 +379,7 @@ internal class AuthorManageControllerTest {
             ), author.birthDate,
             "生年月日が登録されていること"
         )
-        val books = bookService.getBooksInfoByAuthorId(registeredAuthorId)
+        val books = bookQueryService.getBooksInfoByAuthorId(registeredAuthorId)
 
         // 著者に紐づく書籍情報が登録されているか確認
         Assertions.assertTrue(
@@ -487,7 +487,7 @@ internal class AuthorManageControllerTest {
                 )
         ).andReturn()
         result.response.characterEncoding = "UTF-8"
-        val author = authorService.findAuthorBy(registeredAuthorId)
+        val author = authorQueryService.findAuthorBy(registeredAuthorId)
         Assertions.assertEquals(200, result.response.status, "HTTPステータスコードが200であること")
         Assertions.assertTrue(result.response.contentAsString.contains("更新成功"), "更新成功メッセージが含まれていること")
         Assertions.assertEquals(longName, author!!.authorName, "著者名が更新されていること")
@@ -622,12 +622,12 @@ internal class AuthorManageControllerTest {
         Assertions.assertTrue(result.response.contentAsString.contains("更新成功"), "更新成功メッセージが含まれていること")
 
         // 更新された著者情報を取得
-        val author = authorService.findAuthorBy(registeredAuthorId)
+        val author = authorQueryService.findAuthorBy(registeredAuthorId)
         Assertions.assertEquals(name, author!!.authorName, "著者名が更新されていること")
         Assertions.assertEquals(LocalDate.parse(birthDate), author.birthDate, "生年月日が更新されていること")
-        val book1 = bookService.findBookBy(registeredBookId1)
-        val book2 = bookService.findBookBy(registeredBookId2)
-        val book3 = bookService.findBookBy(registeredBookId3)
+        val book1 = bookQueryService.findBookBy(registeredBookId1)
+        val book2 = bookQueryService.findBookBy(registeredBookId2)
+        val book3 = bookQueryService.findBookBy(registeredBookId3)
         Assertions.assertTrue(
             listOf(book1, book2, book3).all { !(it!!.getAuthors().contains(registeredAuthorId)) },
             "著者に紐づく書籍情報が削除されていること"
@@ -661,12 +661,12 @@ internal class AuthorManageControllerTest {
         Assertions.assertTrue(result.response.contentAsString.contains("更新成功"), "更新成功メッセージが含まれていること")
 
         // 更新された著者情報を取得
-        val author = authorService.findAuthorBy(registeredAuthorId)
+        val author = authorQueryService.findAuthorBy(registeredAuthorId)
         Assertions.assertEquals(name, author!!.authorName, "著者名が更新されていること")
         Assertions.assertEquals(LocalDate.parse(birthDate), author.birthDate, "生年月日が更新されていること")
-        val book1 = bookService.findBookBy(registeredBookId1)
-        val book2 = bookService.findBookBy(registeredBookId2)
-        val book3 = bookService.findBookBy(registeredBookId3)
+        val book1 = bookQueryService.findBookBy(registeredBookId1)
+        val book2 = bookQueryService.findBookBy(registeredBookId2)
+        val book3 = bookQueryService.findBookBy(registeredBookId3)
         Assertions.assertTrue(
             listOf(book1, book2, book3).all { it!!.getAuthors().contains(registeredAuthorId) },
             "著者に紐づく書籍情報が登録されていること"

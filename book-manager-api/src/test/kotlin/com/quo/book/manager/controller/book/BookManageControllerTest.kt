@@ -1,8 +1,7 @@
 package com.quo.book.manager.controller.book
 
 import com.quo.book.manager.model.PublicationStatus
-import com.quo.book.manager.service.author.AuthorService
-import com.quo.book.manager.service.book.BookService
+import com.quo.book.manager.service.book.BookQueryService
 import org.junit.jupiter.api.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -23,10 +22,7 @@ internal class BookManageControllerTest {
     private lateinit var mockMvc: MockMvc
 
     @Autowired
-    private lateinit var bookService: BookService
-
-    @Autowired
-    private lateinit var authorService: AuthorService
+    private lateinit var bookQueryService: BookQueryService
 
     // DB初期化の時登録済の著者ID
     private val registeredAuthorId1: String = "9000"
@@ -120,7 +116,7 @@ internal class BookManageControllerTest {
         val jsonResponse: JsonNode = objectMapper.readTree(result.response.contentAsString)
         val message = jsonResponse.get("message").asText()
         val registeredBookId = message.split("書籍番号:")[1].trim()
-        val book = bookService.findBookBy(registeredBookId)
+        val book = bookQueryService.findBookBy(registeredBookId)
         Assertions.assertEquals(longName, book!!.title, "書籍タイトルが登録されていること")
         Assertions.assertEquals(1000.0, book.price, "書籍価格が登録されていること")
         Assertions.assertEquals(PublicationStatus.PUBLISHED, book.publicationStatus, "書籍の状態が登録されていること")
@@ -261,7 +257,7 @@ internal class BookManageControllerTest {
         val jsonResponse: JsonNode = objectMapper.readTree(result.response.contentAsString)
         val message = jsonResponse.get("message").asText()
         val registeredBookId = message.split("書籍番号:")[1].trim()
-        val registeredBook = bookService.findBookBy(registeredBookId)
+        val registeredBook = bookQueryService.findBookBy(registeredBookId)
         Assertions.assertEquals(
             "test book",
             registeredBook!!.title,
@@ -459,7 +455,7 @@ internal class BookManageControllerTest {
         result.response.characterEncoding = "UTF-8"
         Assertions.assertEquals(200, result.response.status, "HTTPステータスコードが200であること")
         Assertions.assertTrue(result.response.contentAsString.contains("更新成功"), "更新成功メッセージが含まれていること")
-        val updatedBook = bookService.findBookBy(registeredBookId)
+        val updatedBook = bookQueryService.findBookBy(registeredBookId)
         Assertions.assertEquals(longTitle, updatedBook!!.title, "書籍タイトルが更新されていること")
         Assertions.assertEquals(price, updatedBook.price, "書籍価格が更新されていること")
         Assertions.assertEquals(publishedStatus, updatedBook.publicationStatus.value, "書籍の状態が更新されていること")
@@ -602,7 +598,7 @@ internal class BookManageControllerTest {
         result.response.characterEncoding = "UTF-8"
         Assertions.assertEquals(200, result.response.status, "HTTPステータスコードが200であること")
         Assertions.assertTrue(result.response.contentAsString.contains("更新成功"), "更新成功メッセージが含まれていること")
-        val updatedBook = bookService.findBookBy(registeredBookId)
+        val updatedBook = bookQueryService.findBookBy(registeredBookId)
         Assertions.assertEquals(title, updatedBook!!.title, "書籍タイトルが更新されていること")
         Assertions.assertEquals(price, updatedBook.price, "書籍価格が更新されていること")
         Assertions.assertEquals(publicationStatus, updatedBook.publicationStatus.value, "書籍の状態が更新されていること")

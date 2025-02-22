@@ -7,7 +7,7 @@ import com.quo.book.manager.dto.book.BookControllerRequest
 import com.quo.book.manager.dto.book.BookInfoResponse
 import com.quo.book.manager.dto.book.BookResponseData
 import com.quo.book.manager.model.book.Book
-import com.quo.book.manager.service.author.AuthorService
+import com.quo.book.manager.service.author.AuthorQueryService
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -17,11 +17,16 @@ import java.util.*
  * 書籍登録アプリケーションサービス
  */
 @Service
-class BookApplicationService(val bookService: BookService, val authorService: AuthorService) {
+class BookApplicationService(
+    val bookValidationService: BookValidationService,
+    val authorQueryService: AuthorQueryService,
+    val bookQueryService: BookQueryService,
+    val bookCommandService: BookCommandService
+) {
     private val _logger = KotlinLogging.logger {}
 
     private fun getAuthorInfoBy(authorId: String): AuthorInfoResponse {
-        val author = authorService.findAuthorBy(authorId)
+        val author = authorQueryService.findAuthorBy(authorId)
         return AuthorInfoResponse(
             id = author!!.authorId!!,
             name = author.authorName,
@@ -51,7 +56,7 @@ class BookApplicationService(val bookService: BookService, val authorService: Au
             )
 
             // 書籍登録し、登録済の書籍情報を取得
-            val registeredBook = bookService.registerBook(book, bookControllerRequest.authors)
+            val registeredBook = bookCommandService.registerBook(book, bookControllerRequest.authors)
 
             return BookManagerApiResponse(
                 ResponseStatus.OK,
@@ -77,13 +82,14 @@ class BookApplicationService(val bookService: BookService, val authorService: Au
      */
     @Transactional
     fun updateBook(oldBookId: String, request: BookControllerRequest): BookManagerApiResponse {
-        try{
-            val oldBook = bookService.findBookBy(oldBookId)
-
+        try {
             // 更新対象書籍が存在しない場合、エラーを返却
-            oldBook ?: return BookManagerApiResponse(
-                ResponseStatus.NOT_FOUND, "書籍が見つかりませんでした"
-            )
+            if (bookValidationService.checkBookExists(oldBookId).not()) {
+                return BookManagerApiResponse(
+                    ResponseStatus.NOT_FOUND, "書籍が見つかりませんでした"
+                )
+            }
+
             // 更新対象を作成
             val newBook = Book(
                 title = request.title,
@@ -91,7 +97,7 @@ class BookApplicationService(val bookService: BookService, val authorService: Au
                 publicationStatus = request.publicationStatus
             )
             // 書籍更新
-            bookService.updateBook(oldBook, newBook, request.authors)
+            bookCommandService.updateBook(oldBookId, newBook, request.authors)
 
             // 更新成功メッセージを返却
             return BookManagerApiResponse(
@@ -111,7 +117,7 @@ class BookApplicationService(val bookService: BookService, val authorService: Au
 
     fun getBooksInfoByAuthorId(authorId: String): BookInfoResponse {
         try{
-            val books = bookService.getBooksInfoByAuthorId(authorId)
+            val books = bookQueryService.getBooksInfoByAuthorId(authorId)
             val bookResponseList = books.map {
                 val authorInfoResponseList = getAllAuthorsInfo(it)
                 BookResponseData(
