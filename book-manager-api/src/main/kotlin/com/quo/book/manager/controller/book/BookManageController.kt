@@ -23,13 +23,7 @@ class BookManageController(val bookApplicationService: BookApplicationService) {
     fun registerBook(@RequestBody @Validated @Parameter(description = "書籍登録情報") bookControllerRequest: BookControllerRequest): ResponseEntity<BookManagerApiResponse> {
         // 書籍を登録し、結果を返却
         val registeredResponse = bookApplicationService.registerBook(bookControllerRequest)
-
-        // 登録結果がOKの場合は200を返却、それ以外は500を返却
-        return if (registeredResponse.result == ResponseStatus.OK) {
-            ResponseEntity.ok(registeredResponse)
-        } else {
-            ResponseEntity.status(500).body(registeredResponse)
-        }
+        return registeredResponse.result.builder.body(registeredResponse)
     }
 
     @PutMapping("/{book_id}/update")
@@ -39,11 +33,7 @@ class BookManageController(val bookApplicationService: BookApplicationService) {
         @RequestBody @Validated @Parameter(description = "書籍更新情報") request: BookControllerRequest
     ): ResponseEntity<BookManagerApiResponse> {
         val updatedResponse = bookApplicationService.updateBook(bookId, request)
-        return if (updatedResponse.result == ResponseStatus.OK) {
-            ResponseEntity.ok(updatedResponse)
-        } else {
-            ResponseEntity.status(500).body(updatedResponse)
-        }
+        return updatedResponse.result.builder.body(updatedResponse)
     }
 
     @GetMapping("/{author_id}/list")

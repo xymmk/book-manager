@@ -21,29 +21,14 @@ dependencies {
     jooqCodegen("org.postgresql:postgresql:42.7.4")
 }
 
-def getDatabaseUrl() {
-    def active = System.getenv("spring.profiles.active")
-    println "Running in $active mode, executing script..."
-    if (active == "test") {
-        return "jdbc:postgresql://localhost:5432/book-manager"
-    }
-    if (active == "dev") {
-        return "jdbc:postgresql://host.docker.internal:5432/book-manager"
-    }
-    if (active == "local") {
-        return "jdbc:postgresql://localhost:5432/book-manager"
-    }
-    return "jdbc:postgresql://localhost:5432/book-manager"
-}
-
 jooq {
     configuration {
 
         jdbc {
             driver = "org.postgresql.Driver"
-            url = getDatabaseUrl()
-            user = "postgres"
-            password = "postgres"
+            url = System.getenv('POSTGRES_DB') ?: "jdbc:postgresql://localhost:5432/book-manager"
+            user = System.getenv('POSTGRES_USER') ?: "postgres"
+            password = System.getenv('POSTGRES_PW') ?: "postgres"
         }
         generator {
             name = 'org.jooq.codegen.KotlinGenerator'
@@ -74,16 +59,20 @@ sourceSets {
     }
 }
 
-tasks.named("compileKotlin") {
-    dependsOn(tasks.named("jooqCodegen"))
+def enableJooqCodegen = project.hasProperty('enableJooqCodegen') && project.property('enableJooqCodegen') == 'true'
+
+if (enableJooqCodegen) {
+    tasks.named("compileKotlin") {
+        dependsOn(tasks.named("jooqCodegen"))
+    }
 }
 
 flyway {
     driver = "org.postgresql.Driver"
     //docker環境でビルドする場合、環境変数から取得し、コンテナのDBに接続する
-    url = getDatabaseUrl()
-    user = "postgres"
-    password = "postgres"
+    url = System.getenv('POSTGRES_DB') ?: "jdbc:postgresql://localhost:5432/book-manager"
+    user = System.getenv('POSTGRES_USER') ?: "postgres"
+    password = System.getenv('POSTGRES_PW') ?: "postgres"
     schemas = ["public"]
     cleanDisabled = false
 }

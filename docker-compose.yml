@@ -5,6 +5,8 @@ services:
     platform: linux/arm64
     ports:
       - "5432:5432"
+    volumes:
+      - ./infra/src/main/resources/db/migration:/docker-entrypoint-initdb.d
     environment:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "postgres"

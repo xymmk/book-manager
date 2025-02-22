@@ -13,13 +13,13 @@ import jakarta.validation.constraints.Size
  */
 data class BookControllerRequest(
     @Schema(description = "タイトル", example = "書籍タイトル", required = true)
-    @field:NotBlank(message = "タイトルは必須です")
-    @field:Size(min = 1, max = 500, message = "タイトルは1文字以上500文字以下です")
+    @field:NotBlank(message = "書籍タイトルは必須です")
+    @field:Size(min = 1, max = 500, message = "書籍タイトルは1文字以上500文字以下です")
     @JsonProperty("title")
     val title: String,
 
     @Schema(description = "価格", example = "0", required = true)
-    @field:Min(value = 0, message = "価格は0以上です")
+    @field:Min(value = 0, message = "書籍価格は0以上である必要があります")
     @JsonProperty("price")
     val price: Double,
 
