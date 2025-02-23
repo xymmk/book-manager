@@ -117,4 +117,7 @@ docker compose up postgres -d
 
 # DB設計
 
+> 参考: https://github.com/xymmk/book-manager/blob/main/doc/db.md
 # IF設計
+
+> 参考: https://github.com/xymmk/book-manager/blob/main/doc/api_if.md
