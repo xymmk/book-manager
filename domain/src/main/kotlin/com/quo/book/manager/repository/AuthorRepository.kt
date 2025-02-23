@@ -16,7 +16,7 @@ interface AuthorRepository {
     /**
      * 著者を登録する
      * @param author 著者情報
-     * @return author 著者
+     * @return author 登録した著者
      */
     fun register(author: Author): Author?
 

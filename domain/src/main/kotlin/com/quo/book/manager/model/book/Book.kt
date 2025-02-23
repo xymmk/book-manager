@@ -2,6 +2,9 @@ package com.quo.book.manager.model.book
 
 import com.quo.book.manager.model.PublicationStatus
 
+/**
+ * 書籍情報
+ */
 data class Book(
     val bookId: String? = "",
     val price: Double,

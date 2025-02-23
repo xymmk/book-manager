@@ -41,6 +41,7 @@ class AuthorApplicationService(
             // 生年月日をLocalDateに変換
             val birthDate = convertBirthDate(authorControllerRequest.birthDate)
 
+            // 著者情報を作成
             val author = Author(
                 authorName = authorControllerRequest.authorName,
                 birthDate = birthDate
@@ -74,6 +75,7 @@ class AuthorApplicationService(
     @Transactional
     fun updateAuthor(authorId: String, authorControllerRequest: AuthorControllerRequest): BookManagerApiResponse {
         try {
+            // 著者が存在しない場合、エラーメッセージを返却
             if (authorValidationService.checkAuthorExists(authorId).not()) {
                 return BookManagerApiResponse(
                     ResponseStatus.NOT_FOUND, "著者が見つかりませんでした"

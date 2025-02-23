@@ -3,6 +3,9 @@ package com.quo.book.manager.model.author
 import org.springframework.util.CollectionUtils
 import java.time.LocalDate
 
+/**
+ * 著者情報
+ */
 data class Author(
     val authorId: String? = "",
     val authorName: String,

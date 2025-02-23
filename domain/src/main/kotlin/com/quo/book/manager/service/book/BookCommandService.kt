@@ -47,7 +47,7 @@ class BookCommandService(val bookRepository: BookRepository,
 
         val updatedBook = newBook.copy(bookId = oldBookId)
 
-        // 著者を更新
+        // 書籍に著者を更新
         updatedBook.updateAuthor(authors)
 
         // 書籍を更新

@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
 
+/**
+ * エラーハンドル
+ */
 @ControllerAdvice
 class RequestException {
     @ExceptionHandler(MethodArgumentNotValidException::class)

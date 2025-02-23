@@ -29,15 +29,14 @@ class AuthorCommandService(@Lazy val bookValidationService: BookValidationServic
             return registeredAuthor
         }
 
+        // 書籍IDリストが全て登録済かチェックする
         bookValidationService.checkAllBooksExists(books)
 
         // 著者に書籍を追加
         author.addBooks(books)
 
         // 著者を登録
-        val registeredAuthor = authorRepository.register(author)
-        require(registeredAuthor != null) { "著者の登録に失敗しました" }
-        return registeredAuthor
+        return authorRepository.register(author) ?: throw IllegalArgumentException("著者の登録に失敗しました")
     }
 
     /**
@@ -57,8 +56,10 @@ class AuthorCommandService(@Lazy val bookValidationService: BookValidationServic
             return
         }
 
+        // 書籍IDリストが全て登録済かチェックする
         bookValidationService.checkAllBooksExists(books)
 
+        // 著者に書籍を更新
         updatedAuthor.updateBook(books)
 
         // 著者を更新

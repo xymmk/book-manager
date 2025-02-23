@@ -2,6 +2,9 @@ package com.quo.book.manager.dto
 
 import org.springframework.http.ResponseEntity
 
+/**
+ * レスポンスステータス
+ */
 enum class ResponseStatus(
     val builder: ResponseEntity.BodyBuilder
 ) {
