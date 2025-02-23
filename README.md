@@ -106,6 +106,8 @@ postgresqlを起動しておく必要があります。
 jooqのコードを生成してから、アプリケーションを起動したい場合、下記のコマンドを実行します。
 
 ```
+# postgresqlは起動していない場合、エラーとなります。
+# 参考: https://github.com/xymmk/book-manager/blob/main/infra/startup_postgresql.sh
 docker compose up postgres -d
 
 ./gradlew :book-manager-api:bootRun -PenableJooqCodegen=true
