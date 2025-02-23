@@ -80,7 +80,7 @@ jOOQのコードは生成済で、APIを起動するだけなら、JOOQのコー
 
 JOOQのコードを生成したい場合、[JOOQのコード](#jooqのコード生成)生成を参考します。
 
-テストを実行するために、[testcontainers](https://testcontainers.com/)を使っていますので、Docker環境が必要です。
+テストを実行するために、[Testcontainers](https://testcontainers.com/)を使っていますので、Docker環境が必要です。
 
 ## テストコマンド
 
