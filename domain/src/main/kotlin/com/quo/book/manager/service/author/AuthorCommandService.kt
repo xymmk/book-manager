@@ -12,8 +12,11 @@ import java.util.*
  * 著者コマンドサービス
  */
 @Service
-class AuthorCommandService(@Lazy val bookValidationService: BookValidationService,
-                           val authorRepository: AuthorRepository) {
+class AuthorCommandService(
+    @Lazy val bookValidationService: BookValidationService,
+    val authorValidationService: AuthorValidationService,
+    val authorRepository: AuthorRepository
+) {
 
     /**
      * 著者を登録する
@@ -50,6 +53,9 @@ class AuthorCommandService(@Lazy val bookValidationService: BookValidationServic
 
         // 書籍IDリストは空と設定されている場合、書籍情報も空と設定し、著者の書籍情報を削除
         if (CollectionUtils.isEmpty(books)) {
+            // 著者に紐づく書籍情報を取得し、著者との関係を削除される場合、全ての著者が1人以上設定されているか確認する
+            authorValidationService.checkBookRelationExists(oldAuthorId)
+
             updatedAuthor.updateBook(Collections.emptyList())
             // 著者を更新し、処理を終了
             authorRepository.updateAuthor(updatedAuthor)

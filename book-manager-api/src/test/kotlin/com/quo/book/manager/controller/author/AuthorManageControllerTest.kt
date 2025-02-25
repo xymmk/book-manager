@@ -337,6 +337,8 @@ internal class AuthorManageControllerTest {
     fun registerAuthorWithBookTest() {
         val registeredBookId1 = "8000"
         val registeredBookId2 = "8001"
+        val registeredBookId3 = "8002"
+        val registeredBookId4 = "8003"
         val birthDate = "2021-01-01"
         val name = "registerAuthorWithBookTest"
 
@@ -349,7 +351,7 @@ internal class AuthorManageControllerTest {
                     {
                         "name": "$name",
                         "birth_date": "$birthDate",
-                        "books": ["$registeredBookId1", "$registeredBookId2"]
+                        "books": ["$registeredBookId1", "$registeredBookId2", "$registeredBookId3", "$registeredBookId4"]
                     }
                     """.trimIndent()
                 )
@@ -575,7 +577,7 @@ internal class AuthorManageControllerTest {
     @Test
     fun updateAuthorWithNotExistsTest() {
         val result = mockMvc.perform(
-            MockMvcRequestBuilders.put("/author/1/update")
+            MockMvcRequestBuilders.put("/author/$registeredAuthorId/update")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                     """
@@ -595,8 +597,34 @@ internal class AuthorManageControllerTest {
         )
     }
 
-    @DisplayName("著者更新エンドポイントのテスト")
+    @DisplayName("著者更新エンドポイントのテスト - 著者との関係を削除される場合、全ての著者が1人以上設定されていない場合")
     @Order(21)
+    @Test
+    fun updateAuthorDeleteBookRelation() {
+        val updateAuthorId = "6003"
+        val result = mockMvc.perform(
+            MockMvcRequestBuilders.put("/author/$updateAuthorId/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    """
+                    {
+                        "name": "test author",
+                        "birth_date": "2021-01-01",
+                        "books": []
+                    }
+                    """.trimIndent()
+                )
+        ).andReturn()
+        result.response.characterEncoding = "UTF-8"
+        Assertions.assertEquals(500, result.response.status, "HTTPステータスコードが500であること")
+        Assertions.assertTrue(
+            result.response.contentAsString.contains("著者は1人以上設定する必要があります"),
+            "エラーメッセージが含まれていること"
+        )
+    }
+
+    @DisplayName("著者更新エンドポイントのテスト")
+    @Order(22)
     @Test
     fun updateAuthorTest() {
         val name = "updateAuthorTest"
@@ -635,7 +663,7 @@ internal class AuthorManageControllerTest {
     }
 
     @DisplayName("著者更新エンドポイントのテスト - 書籍ID付き更新")
-    @Order(22)
+    @Order(23)
     @Test
     fun updateAuthorWithBookTest() {
         val name = "updateAuthorWithBookTest"

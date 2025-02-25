@@ -25,9 +25,11 @@ INSERT INTO authors (author_id, author_name, birth_date) VALUES (9001 ,'Author 2
 INSERT INTO authors (author_id, author_name, birth_date) VALUES (9002 ,'Author 3', '1999-03-01');
 INSERT INTO authors (author_id, author_name, birth_date) VALUES (9003 ,'Author 4', '1999-04-01');
 
+INSERT INTO authors (author_id, author_name, birth_date) VALUES (5999 ,'Author 5999', '2003-01-01');
 INSERT INTO authors (author_id, author_name, birth_date) VALUES (6000 ,'Author 6000', '2000-01-01');
 INSERT INTO authors (author_id, author_name, birth_date) VALUES (6001 ,'Author 6001', '2000-02-01');
 INSERT INTO authors (author_id, author_name, birth_date) VALUES (6002 ,'Author 6002', '2000-03-01');
+INSERT INTO authors (author_id, author_name, birth_date) VALUES (6003 ,'Author 6003', '1999-03-01');
 
 -- テスト用の本を登録
 INSERT INTO books (book_id, price, title, publication_status) VALUES (8000 , 123.111, 'title 8000', 'UNPUBLISHED');
@@ -41,6 +43,8 @@ INSERT INTO books (book_id, price, title, publication_status) VALUES (5002 , 456
 INSERT INTO books (book_id, price, title, publication_status) VALUES (5003 , 129.99, 'title 5003-6000', 'UNPUBLISHED');
 INSERT INTO books (book_id, price, title, publication_status) VALUES (5004 , 99.99, 'title 5004-6000', 'PUBLISHED');
 INSERT INTO books (book_id, price, title, publication_status) VALUES (5005 , 299.99, 'title 5005-6000', 'PUBLISHED');
+INSERT INTO books (book_id, price, title, publication_status) VALUES (5006 , 799.99, 'title 5006-5999', 'PUBLISHED');
+INSERT INTO books (book_id, price, title, publication_status) VALUES (5007 , 999.99, 'title 5007-6003', 'PUBLISHED');
 
 
 -- テスト用の著者と本の関連を登録
@@ -60,3 +64,6 @@ INSERT INTO author_book (book_id, author_id) VALUES (5002, 6002);
 INSERT INTO author_book (book_id, author_id) VALUES (5003, 6002);
 INSERT INTO author_book (book_id, author_id) VALUES (5004, 6002);
 INSERT INTO author_book (book_id, author_id) VALUES (5005, 6001);
+INSERT INTO author_book (book_id, author_id) VALUES (5006, 6003);
+INSERT INTO author_book (book_id, author_id) VALUES (5007, 6003);
+INSERT INTO author_book (book_id, author_id) VALUES (5006, 5999);
