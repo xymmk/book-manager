@@ -75,6 +75,7 @@ flyway {
     password = System.getenv('POSTGRES_PW') ?: "postgres"
     schemas = ["public"]
     cleanDisabled = false
+    baselineOnMigrate = true
 }
 
 tasks.named("jooqCodegen") {
