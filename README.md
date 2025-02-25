@@ -6,7 +6,7 @@
 4. [API 起動](#api-起動)
 5. [API 呼び出す例](#api呼び出す例)
 6. [単体テスト](#単体テスト)
-7. [JOOQ のコード生成](#JOOQのコード生成)
+7. [JOOQ のコード生成](#jooq-のコード生成)
 8. [DB 設計](#db設計)
 9. [IF 設計](#if設計)
 
@@ -54,7 +54,7 @@ API のビルド・起動時に、JOOQ のコード生成は不要です。
 
 > swagger: http://localhost:9099/book-manager-api/swagger-ui/index.html#/
 
-(JOOQ コード生成について、[JOOQ のコード生成](#JOOQのコード生成)を参考してください。)
+(JOOQ コード生成について、[JOOQ のコード生成](#jooq-のコード生成)を参考してください。)
 
 ## ローカル起動
 
@@ -230,7 +230,7 @@ JOOQ のコードは生成済です。単体テストを実行する場合、JOO
 
 テストを実行するために、[Testcontainers](https://testcontainers.com/)を使っていますので、ローカルではDocker 環境が必要です。
 
-(JOOQ コード生成について、[JOOQ のコード生成](#JOOQのコード生成)を参考してください。)
+(JOOQ コード生成について、[JOOQ のコード生成](#jooq-のコード生成)を参考してください。)
 
 ## テストコマンド
 
