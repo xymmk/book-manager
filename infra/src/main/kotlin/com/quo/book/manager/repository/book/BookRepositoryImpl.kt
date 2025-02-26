@@ -33,7 +33,7 @@ class BookRepositoryImpl(val dsl: DSLContext) : BookRepository {
      * @param authorIdList 著者情報
      */
     private fun insertAssociation(bookId: Int, authorIdList: List<String>) {
-        authorIdList.forEach() {
+        authorIdList.forEach {
             dsl.insertInto(AuthorBook.AUTHOR_BOOK)
                 .set(AuthorBook.AUTHOR_BOOK.BOOK_ID, bookId)
                 .set(AuthorBook.AUTHOR_BOOK.AUTHOR_ID, it.toInt())
