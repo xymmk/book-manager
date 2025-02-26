@@ -4,8 +4,8 @@
 2. [アーキテクチャ](#アーキテクチャ)
 3. [開発環境](#開発環境)
 4. [API 起動](#api-起動)
-5. [API 呼び出す例](#api呼び出す例)
-6. [単体テスト](#単体テスト)
+5. [単体テスト](#単体テスト)
+6. [API 呼び出す例](#api呼び出す例)
 7. [JOOQ のコード生成](#jooq-のコード生成)
 8. [DB 設計](#db設計)
 9. [IF 設計](#if設計)
@@ -79,6 +79,37 @@ Docker 環境で起動する場合、コンテナ内部で jar を作成して�
 
 ```
 docker compose up
+```
+
+# 単体テスト
+
+JOOQ のコードは生成済です。単体テストを実行する場合、JOOQ のコード生成は不要です。
+
+テストを実行するために、[Testcontainers](https://testcontainers.com/)を使っていますので、ローカルではDocker 環境が必要です。
+
+(JOOQ コード生成について、[JOOQ のコード生成](#jooq-のコード生成)を参考してください。)
+
+## テストケース
+
+> https://github.com/xymmk/book-manager/tree/main/book-manager-api/src/test/kotlin/com/quo/book/manager/controller
+
+## テストデータ
+ > https://github.com/xymmk/book-manager/blob/main/book-manager-api/src/test/resources/init_test_postgres.sql
+
+## テストコマンド
+
+- 全部実行
+
+```
+export SPRING_PROFILES_ACTIVE=test
+./gradlew :book-manager-api:test
+```
+
+- 個別のメソッド実行
+
+```
+export SPRING_PROFILES_ACTIVE=test
+./gradlew :book-manager-api:test "{テストしたいクラス名}.{テストしたいメソッド}"
 ```
 
 # API 呼び出す例
@@ -222,30 +253,6 @@ curl -X 'GET' \
     }
   ]
 }
-```
-
-# 単体テスト
-
-JOOQ のコードは生成済です。単体テストを実行する場合、JOOQ のコード生成は不要です。
-
-テストを実行するために、[Testcontainers](https://testcontainers.com/)を使っていますので、ローカルではDocker 環境が必要です。
-
-(JOOQ コード生成について、[JOOQ のコード生成](#jooq-のコード生成)を参考してください。)
-
-## テストコマンド
-
-- 全部実行
-
-```
-export SPRING_PROFILES_ACTIVE=test
-./gradlew :book-manager-api:test
-```
-
-- 個別のメソッド実行
-
-```
-export SPRING_PROFILES_ACTIVE=test
-./gradlew :book-manager-api:test "{テストしたいクラス名}.{テストしたいメソッド}"
 ```
 
 # JOOQ のコード生成
