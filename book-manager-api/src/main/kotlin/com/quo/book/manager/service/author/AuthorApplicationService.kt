@@ -14,7 +14,6 @@ import java.time.format.DateTimeFormatter
 @Service
 class AuthorApplicationService(
     val authorCommandService: AuthorCommandService,
-    val authorQueryService: AuthorQueryService,
     val authorValidationService: AuthorValidationService
 ) {
     private val _logger = KotlinLogging.logger {}
@@ -81,6 +80,9 @@ class AuthorApplicationService(
                     ResponseStatus.NOT_FOUND, "著者が見つかりませんでした"
                 )
             }
+
+            // 著者に紐づく書籍情報を取得し、著者との関係を削除される場合、全ての著者が1人以上設定されているか確認する
+            authorValidationService.checkBookRelationExists(authorId, authorControllerRequest.books)
 
             // 生年月日をLocalDateに変換
             val birthDate = convertBirthDate(authorControllerRequest.birthDate)

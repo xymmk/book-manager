@@ -597,10 +597,10 @@ internal class AuthorManageControllerTest {
         )
     }
 
-    @DisplayName("著者更新エンドポイントのテスト - 著者との関係を削除される場合、全ての著者が1人以上設定されていない場合")
+    @DisplayName("著者更新エンドポイントのテスト - 著者との関係を削除される場合、全ての著者が1人以上設定されていない場合(booksリストは空)")
     @Order(21)
     @Test
-    fun updateAuthorDeleteBookRelation() {
+    fun updateAuthorDeleteBookWithEmptyListRelation() {
         val updateAuthorId = "6003"
         val result = mockMvc.perform(
             MockMvcRequestBuilders.put("/author/$updateAuthorId/update")
@@ -621,10 +621,47 @@ internal class AuthorManageControllerTest {
             result.response.contentAsString.contains("著者は1人以上設定する必要があります"),
             "エラーメッセージが含まれていること"
         )
+
+        val regex = """書籍番号:\s*(\d+)""".toRegex()
+        val matchResult = regex.find(result.response.contentAsString)
+        val bookId = matchResult?.groups?.get(1)?.value
+
+        Assertions.assertEquals("5007", bookId, "書籍番号は正しいこと")
+    }
+
+    @DisplayName("著者更新エンドポイントのテスト - 著者との関係を削除される場合、全ての著者が1人以上設定されていない場合(booksリストは値あり)")
+    @Order(22)
+    @Test
+    fun updateAuthorDeleteBookWithValueListRelation() {
+        val updateAuthorId = "5998"
+        val updateBookId = "3998"
+        val result = mockMvc.perform(
+            MockMvcRequestBuilders.put("/author/$updateAuthorId/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    """
+                    {
+                        "name": "test author",
+                        "birth_date": "2021-01-01",
+                        "books": ["$updateBookId"]
+                    }
+                    """.trimIndent()
+                )
+        ).andReturn()
+        result.response.characterEncoding = "UTF-8"
+        Assertions.assertEquals(500, result.response.status, "HTTPステータスコードが500であること")
+        Assertions.assertTrue(
+            result.response.contentAsString.contains("著者は1人以上設定する必要があります"),
+            "エラーメッセージが含まれていること"
+        )
+        val regex = """書籍番号:\s*(\d+)""".toRegex()
+        val matchResult = regex.find(result.response.contentAsString)
+        val bookId = matchResult?.groups?.get(1)?.value
+        Assertions.assertEquals("3999", bookId, "書籍番号は正しいこと")
     }
 
     @DisplayName("著者更新エンドポイントのテスト")
-    @Order(22)
+    @Order(23)
     @Test
     fun updateAuthorTest() {
         val name = "updateAuthorTest"
@@ -663,7 +700,7 @@ internal class AuthorManageControllerTest {
     }
 
     @DisplayName("著者更新エンドポイントのテスト - 書籍ID付き更新")
-    @Order(23)
+    @Order(24)
     @Test
     fun updateAuthorWithBookTest() {
         val name = "updateAuthorWithBookTest"

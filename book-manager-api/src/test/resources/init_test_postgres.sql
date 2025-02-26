@@ -25,6 +25,8 @@ INSERT INTO authors (author_id, author_name, birth_date) VALUES (9001 ,'Author 2
 INSERT INTO authors (author_id, author_name, birth_date) VALUES (9002 ,'Author 3', '1999-03-01');
 INSERT INTO authors (author_id, author_name, birth_date) VALUES (9003 ,'Author 4', '1999-04-01');
 
+INSERT INTO authors (author_id, author_name, birth_date) VALUES (5997 ,'Author 5997', '2001-01-01');
+INSERT INTO authors (author_id, author_name, birth_date) VALUES (5998 ,'Author 5998', '2001-01-01');
 INSERT INTO authors (author_id, author_name, birth_date) VALUES (5999 ,'Author 5999', '2003-01-01');
 INSERT INTO authors (author_id, author_name, birth_date) VALUES (6000 ,'Author 6000', '2000-01-01');
 INSERT INTO authors (author_id, author_name, birth_date) VALUES (6001 ,'Author 6001', '2000-02-01');
@@ -36,6 +38,10 @@ INSERT INTO books (book_id, price, title, publication_status) VALUES (8000 , 123
 INSERT INTO books (book_id, price, title, publication_status) VALUES (8001 , 123.112, 'title 8001', 'UNPUBLISHED');
 INSERT INTO books (book_id, price, title, publication_status) VALUES (8002 , 123.999, 'title 8002', 'UNPUBLISHED');
 INSERT INTO books (book_id, price, title, publication_status) VALUES (8003 , 123.99, 'title PUBLISHED', 'PUBLISHED');
+
+INSERT INTO books (book_id, price, title, publication_status) VALUES (3998 , 1323.99, 'title 3998-5998', 'PUBLISHED');
+INSERT INTO books (book_id, price, title, publication_status) VALUES (3999 , 1293.99, 'title 3999-5998', 'PUBLISHED');
+
 
 INSERT INTO books (book_id, price, title, publication_status) VALUES (5000 , 123.99, 'title 5000-6000', 'PUBLISHED');
 INSERT INTO books (book_id, price, title, publication_status) VALUES (5001 , 222.99, 'title 5001-6000', 'PUBLISHED');
@@ -67,3 +73,6 @@ INSERT INTO author_book (book_id, author_id) VALUES (5005, 6001);
 INSERT INTO author_book (book_id, author_id) VALUES (5006, 6003);
 INSERT INTO author_book (book_id, author_id) VALUES (5007, 6003);
 INSERT INTO author_book (book_id, author_id) VALUES (5006, 5999);
+INSERT INTO author_book (book_id, author_id) VALUES (3998, 5998);
+INSERT INTO author_book (book_id, author_id) VALUES (3998, 5997);
+INSERT INTO author_book (book_id, author_id) VALUES (3999, 5998);

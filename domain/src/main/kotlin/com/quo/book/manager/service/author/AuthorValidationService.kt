@@ -39,18 +39,22 @@ class AuthorValidationService(
     /**
      * 著者に紐づく書籍情報を取得し、著者との関係を削除される場合、全ての著者が1人以上設定されているか確認する
      * @param oldAuthorId 著者ID
+     * @param bookList 書籍IDリスト
      * @throws IllegalArgumentException 著者に紐づく書籍が1人以上設定されていない場合
      */
-    fun checkBookRelationExists(oldAuthorId: String) {
+    fun checkBookRelationExists(oldAuthorId: String, bookList: List<String>) {
         // 著者に紐づく書籍情報を取得
         val books = bookQueryService.getBooksInfoByAuthorId(oldAuthorId)
 
         // 著者に紐づく書籍を確認し、著者との関係を削除される場合、全ての著者が1人以上設定されているか確認
         books.forEach { book ->
-            val authors = book.getAuthors().filterNot { id -> id == oldAuthorId }
-            require(
-                CollectionUtils.isEmpty(authors).not()
-            ) { "書籍番号${book.bookId}に紐づく著者は1人以上設定する必要があります。" }
+            if (bookList.contains(book.bookId).not()) {
+                val deletedOldAuthorList = book.getAuthors().filter { it != oldAuthorId }
+                require(
+                    CollectionUtils.isEmpty(deletedOldAuthorList).not()
+                ) { "書籍番号: ${book.bookId} に紐づく著者は1人以上設定する必要があります。" }
+
+            }
         }
     }
 
